@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.5.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+
+                    },
+                    backgroundImage: {
+
+                    }
+
+                },
+            },
+        };
+    </script>
+    {% block title %}
+
+    {% endblock title %}
+    <style>
+        :root {
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body class="relative">
+    {% block body %}
+
+    {% endblock body %}
+
+    <script>
+        $('#load').hide()
+        $(document).ready(() => {
+            $("#image").change(function () {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        $("#preview")
+                            .attr("src", event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+        });
+        $("#clear").click(function () {
+            $("#image").val('');
+            $("#preview").removeAttr('src');
+            $("#msg-box").html("hi");
+            try{
+                $('#low').removeClass('bg-pink-500');
+                $('#very-low').removeClass('bg-pink-500');
+                $('#medium').removeClass('bg-pink-500');
+                $('#high' ).removeClass('bg-pink-500');
+                $('#very-high').removeClass('bg-pink-500');
+            }
+            catch(err){
+                console.log(err)
+            }
+            try{
+                $("input[type='radio']").prop('checked', false)
+            }
+            catch(err){
+                console.log(err)
+            }
+
+           
+        });
+
+        // $("#form").submit(function (e) {
+        //    e.preventDefault();
+        //    var deta=$("this").serialize;
+        //    console.log(deta)
+        //    $.ajax({
+        //     type:'POST',
+        //     url:'',
+        //     data:deta,
+        //     success:function(response){
+        //         console.log(response)
+        //     }
+
+        //    })
+        // });
+        $("#process").on("click", function () {
+            var form = $("#form")[0];
+            var formData = new FormData(form);
+            console.log(formData);
+
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: formData,
+                processData: false,
+                contentType: false,
+                processData: false,
+                contentType: false,
+                // async: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    $("#msg-box").html(response.message);
+                    $('#' + response['class']).addClass('bg-pink-500');
+                },
+                error: function (xhr) {
+                    alert("File upload failed.");
+                },
+                beforeSend: function () {
+                    $('#load').show();
+                },
+                complete: function () {
+                    $('#load').hide();
+                }
+
+            });
+
+        });
+    </script>
+</body>
+
+</html>
