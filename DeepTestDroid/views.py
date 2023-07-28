@@ -7,6 +7,7 @@ import cv2
 import os
 from django.conf import settings
 import json
+from xgboost import XGBRegressor
 CLASS = ['high', 'low', 'medium', 'very-high', 'very-low']
 SS_TYPE = ['login', 'shop', 'map', 'social', 'other']
 ROOT_DIR = settings.BASE_DIR
@@ -15,7 +16,6 @@ ROOT_DIR = settings.BASE_DIR
 def black(request):
     if request.method == 'POST':
         ss_idx = request.POST.get('type', None)
-
         myfile = request.FILES['image']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
@@ -29,14 +29,11 @@ def black(request):
         maxx = -1
         yhat = yhat[0]
         iddx = False
-        print(yhat)
         for i in range(len(yhat)):
             print(yhat[i])
             if yhat[i] > maxx:
                 maxx = yhat[i]
                 iddx = i
-        print(CLASS[iddx])
-
         ss = SS_TYPE[int(ss_idx)]
         cl = CLASS[iddx]
         message = ''
@@ -85,3 +82,53 @@ def black(request):
 
         return HttpResponse(json.dumps({'class': cl, 'message': message}), content_type="application/json")
     return render(request, 'black.html')
+
+
+def white(request):
+    if request.method == 'POST':
+        tool = request.POST.get('tool', None)
+        print(request.POST)
+        model = XGBRegressor()
+        model.load_model('xgbreg.json')
+        x = list()
+        x.append(int(request.POST['plocs']))
+        x.append(int(request.POST['mplocs']))
+        x.append(int(request.POST['tlocs']))
+        x.append(int(request.POST['mtlocs']))
+        x.append(int(request.POST['classes']))
+        x.append(int(request.POST['aclasses']))
+        x.append(int(request.POST['dclasses']))
+        x.append(int(request.POST['mclasses']))
+        x.append(int(request.POST['methods']))
+        x.append(int(request.POST['amethods']))
+        x.append(int(request.POST['dmethods']))
+        x.append(int(request.POST['mmethods']))
+        x.append(int(request.POST['cmmethods']))
+
+        if tool=='Espresso':
+            x=x+[1,0,0,0]
+        elif tool=='Robolectric':
+           x=x+[0,1,0,0]
+        elif tool=='Robotium':
+            x=x+[0,0,1,0]
+        else:
+            x=x+[0,0,0,1]
+
+        n_arr= model.predict(np.array([x],dtype=float))
+        res=n_arr[0].tolist()
+        def zeroor(x):
+            if x<0:
+                return -1
+            return x
+        context={
+            'TLR':zeroor(res[0]),
+            'MTRL':zeroor(res[1]),
+            'MRTL':zeroor(res[2]),
+            'TMR':zeroor(res[3]),
+            'MCR':zeroor(res[4]),
+            'MMR':zeroor(res[5]),
+            'RFCR':zeroor(res[6]),
+            'FCR':zeroor(res[7])
+        }
+        return HttpResponse(json.dumps(context), content_type="application/json")
+    return render(request, 'white.html')

@@ -34,6 +34,20 @@
 </head>
 
 <body class="relative">
+    <div class="navbar bg-base-100 mb-5 h-auto">
+        <div class="navbar-start">
+          <a class="btn btn-ghost normal-case text-xl">DeepTestDroid</a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+          <ul class="menu menu-horizontal px-1">
+            <li class=" font-semibold text-yellow-50"><a href="{% url 'black' %}">Black Box</a></li>
+            <li class=" font-semibold text-yellow-50"><a href="{% url 'white' %}">White Box</a></li>
+          </ul>
+        </div>
+      </div>
+    <div class="absolute bg-slate-800 inset-0 z-10 opacity-70 flex justify-center items-center" id="load">
+        <span class="loading loading-ring loading-lg w-24"></span>
+    </div>
     {% block body %}
 
     {% endblock body %}
@@ -74,24 +88,15 @@
             catch(err){
                 console.log(err)
             }
+            try{
+                $("#row").html("");
+            }catch(err){
+                console.log(err)
+            }
 
            
         });
 
-        // $("#form").submit(function (e) {
-        //    e.preventDefault();
-        //    var deta=$("this").serialize;
-        //    console.log(deta)
-        //    $.ajax({
-        //     type:'POST',
-        //     url:'',
-        //     data:deta,
-        //     success:function(response){
-        //         console.log(response)
-        //     }
-
-        //    })
-        // });
         $("#process").on("click", function () {
             var form = $("#form")[0];
             var formData = new FormData(form);
@@ -114,6 +119,46 @@
                 },
                 error: function (xhr) {
                     alert("File upload failed.");
+                },
+                beforeSend: function () {
+                    $('#load').show();
+                },
+                complete: function () {
+                    $('#load').hide();
+                }
+
+            });
+
+        });
+        $("#form_button").on("click", function () {
+            var form = $("#form_2")[0];
+            var formData = new FormData(form);
+            console.log(formData);
+
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: formData,
+                processData: false,
+                contentType: false,
+                processData: false,
+                contentType: false,
+                // async: false,
+                cache: false,
+                success: function (response) {
+                    //console.log(response);
+                    output="";
+                    for (const key in response) {
+                        if (Object.hasOwnProperty.call(response, key)) {
+                            const element = response[key];
+                            output+="<tr><td>"+key+"</td>"+"<td>"+element+"</td></tr>"
+                        }
+                    }
+                    $("#row").html(output);
+
+                },
+                error: function (xhr) {
+                    alert("failed.");
                 },
                 beforeSend: function () {
                     $('#load').show();
