@@ -21,7 +21,7 @@ def black(request):
         filename = fs.save(myfile.name, myfile)
         print(filename)
         uploaded_file_url = fs.url(filename)
-        model = load_model('77acu/')
+        model = load_model('mobilenetv3/')
         img = cv2.imread(os.path.join(ROOT_DIR, 'media', filename))
         # image=os.path.join(app.root_path, 'static', 'uploads', filename)
         resize = tf.image.resize(img, (224, 224))
