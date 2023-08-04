@@ -119,7 +119,7 @@ def white(request):
         def zeroor(x):
             if x<0:
                 return -1
-            return x
+            return round(x,2)
         context={
             'TLR':zeroor(res[0]),
             'MTRL':zeroor(res[1]),
