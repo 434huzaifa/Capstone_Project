@@ -80,6 +80,8 @@ def black(request):
             else:
                 message = 'Reduce Element Will be better'
 
+        
+        print(f'{cl}:{message}')
         return HttpResponse(json.dumps({'class': cl, 'message': message}), content_type="application/json")
     return render(request, 'black.html')
 
@@ -87,7 +89,6 @@ def black(request):
 def white(request):
     if request.method == 'POST':
         tool = request.POST.get('tool', None)
-        print(request.POST)
         model = XGBRegressor()
         model.load_model('xgbreg.json')
         x = list()
@@ -116,6 +117,7 @@ def white(request):
 
         n_arr= model.predict(np.array([x],dtype=float))
         res=n_arr[0].tolist()
+        print(res)
         def zeroor(x):
             if x<0:
                 return -1
@@ -130,5 +132,6 @@ def white(request):
             'RFCR':zeroor(res[6]),
             'FCR':zeroor(res[7])
         }
+        print(context)
         return HttpResponse(json.dumps(context), content_type="application/json")
     return render(request, 'white.html')
