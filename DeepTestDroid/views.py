@@ -80,7 +80,6 @@ def black(request):
             else:
                 message = 'Reduce Element Will be better'
 
-        
         print(f'{cl}:{message}')
         return HttpResponse(json.dumps({'class': cl, 'message': message}), content_type="application/json")
     return render(request, 'black.html')
@@ -106,31 +105,32 @@ def white(request):
         x.append(int(request.POST['mmethods']))
         x.append(int(request.POST['cmmethods']))
 
-        if tool=='Espresso':
-            x=x+[1,0,0,0]
-        elif tool=='Robolectric':
-           x=x+[0,1,0,0]
-        elif tool=='Robotium':
-            x=x+[0,0,1,0]
+        if tool == 'Espresso':
+            x = x+[1, 0, 0, 0]
+        elif tool == 'Robolectric':
+            x = x+[0, 1, 0, 0]
+        elif tool == 'Robotium':
+            x = x+[0, 0, 1, 0]
         else:
-            x=x+[0,0,0,1]
+            x = x+[0, 0, 0, 1]
 
-        n_arr= model.predict(np.array([x],dtype=float))
-        res=n_arr[0].tolist()
+        n_arr = model.predict(np.array([x], dtype=float))
+        res = n_arr[0].tolist()
         print(res)
+
         def zeroor(x):
-            if x<0:
+            if x < 0:
                 return -1
-            return round(x,2)
-        context={
-            'TLR':zeroor(res[0]),
-            'MTRL':zeroor(res[1]),
-            'MRTL':zeroor(res[2]),
-            'TMR':zeroor(res[3]),
-            'MCR':zeroor(res[4]),
-            'MMR':zeroor(res[5]),
-            'RFCR':zeroor(res[6]),
-            'FCR':zeroor(res[7])
+            return round(x, 2)
+        context = {
+            'TLR': zeroor(res[0]),
+            'MTRL': zeroor(res[1]),
+            'MRTL': zeroor(res[2]),
+            'TMR': zeroor(res[3]),
+            'MCR': zeroor(res[4]),
+            'MMR': zeroor(res[5]),
+            'RFCR': zeroor(res[6]),
+            'FCR': zeroor(res[7])
         }
         print(context)
         return HttpResponse(json.dumps(context), content_type="application/json")
