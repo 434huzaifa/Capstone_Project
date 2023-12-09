@@ -11,6 +11,9 @@ GUI testing automation and testing tools automation
 
 [Whitebox](https://figshare.com/articles/dataset/Testing_Fragility_Data_-_ESEM/7149104/3)
 
+# Model
+[mobilenetv3](https://drive.google.com/file/d/19TZxlVYKjQgqQVUSCV0uy1zCZg85b-RX/view?usp=sharing)
+
 # Extra file before creating the model
 [Pre_DeepTestDroid](https://github.com/434huzaifa/Pre_DeepTestDroid)
 
