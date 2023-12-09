@@ -19,5 +19,6 @@ GUI testing automation and testing tools automation
 [Pre_DeepTestDroid](https://github.com/434huzaifa/Pre_DeepTestDroid)
 
 # Read Before Use
-- Rico dataset move to Kaggle after the shutdown of their website.
-- Both datasets were preprocessed before using it to make the model.
+- The Rico dataset moved to Kaggle after the shutdown of their website.
+- Both datasets were preprocessed before being it to make the model.
+- To run the project download the models and place it in the same directory as `manage.py`
