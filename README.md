@@ -11,7 +11,7 @@ GUI testing automation and testing tools automation
 
 [Whitebox](https://figshare.com/articles/dataset/Testing_Fragility_Data_-_ESEM/7149104/3)
 
-# Model
+# Trained Model
 [mobilenetv3](https://drive.google.com/file/d/19TZxlVYKjQgqQVUSCV0uy1zCZg85b-RX/view?usp=sharing)
 
 [xgbreg](https://drive.google.com/file/d/1s9IP75AMUZ7zcUWoTkUyNa0fmKLblZNU/view?usp=sharing)
